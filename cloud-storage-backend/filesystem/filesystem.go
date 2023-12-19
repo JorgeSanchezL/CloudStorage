@@ -1,6 +1,7 @@
 package filesystem
 
 import (
+	"errors"
 	"fmt"
 	"mime/multipart"
 	"net/http"
@@ -34,20 +35,30 @@ var (
 	fs FileSystem
 )
 
-func InitializeFileSystem(path string) {
+var (
+	ErrCannotCreateRootDirectory = errors.New("cannot create root directory")
+)
+
+func InitializeFileSystem(path string) error {
+	var (
+		data    *DirectoryData
+		errLast error
+	)
 	data, err := ReadDirectory(path)
 	if err != nil {
-		log.Logger.Error().Err(err).Msg("Error reading root directory")
 		if os.IsNotExist(err) {
 			err = os.Mkdir(path, 0755)
 			if err != nil {
-				panic(fmt.Sprintf("Error creating root directory: %s", err.Error()))
+				return errors.Join(ErrCannotCreateRootDirectory, err)
 			}
-			InitializeFileSystem(path)
-			return
+			data, errLast = ReadDirectory(path)
+			if errLast != nil {
+				return errLast
+			}
 		}
 	}
-	fs = FileSystem{Root: *data} // check panic, create root if not exists
+	fs = FileSystem{Root: *data}
+	return err
 }
 
 func ReadDirectory(path string) (*DirectoryData, error) {

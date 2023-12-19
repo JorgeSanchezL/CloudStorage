@@ -3,7 +3,9 @@ package router
 import (
 	"bytes"
 	"cloud-storage-backend/filesystem"
+	"errors"
 	"fmt"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
@@ -12,7 +14,14 @@ import (
 
 func NewGinRouter() *gin.Engine {
 
-	filesystem.InitializeFileSystem("root")
+	err := filesystem.InitializeFileSystem("root")
+	if errors.Is(err, filesystem.ErrCannotCreateRootDirectory) {
+		log.Logger.Fatal().Err(err).Msg("Cannot create root directory")
+	} else if err != nil && os.IsNotExist(err) {
+		log.Logger.Warn().Msg("Root directory does not exist. Creating a new one...")
+	} else if err != nil {
+		log.Logger.Fatal().Err(err).Msg("Unexpected error")
+	}
 
 	gin.SetMode(gin.DebugMode)
 	engine := gin.New()
