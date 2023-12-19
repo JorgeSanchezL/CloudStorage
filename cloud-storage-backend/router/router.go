@@ -10,13 +10,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-var (
-	FileSystem filesystem.FileSystem
-)
-
 func NewGinRouter() *gin.Engine {
 
-	FileSystem = filesystem.ReadFileSystem("root")
+	filesystem.InitializeFileSystem("root")
 
 	gin.SetMode(gin.DebugMode)
 	engine := gin.New()
@@ -52,6 +48,8 @@ func NewGinRouter() *gin.Engine {
 	router.DELETE("/", handleDeleteFile())
 
 	addXGroup(router)
+	addFileGroup(router)
+	addDirectoryGroup(router)
 
 	return engine
 }
@@ -73,7 +71,6 @@ func addFileGroup(router *gin.RouterGroup) {
 func addDirectoryGroup(router *gin.RouterGroup) {
 	directoryGroup := router.Group("/directory")
 
-	directoryGroup.GET("/", handleGetFile())
-	directoryGroup.POST("/", handlePostFile())
-	directoryGroup.DELETE("/", handleDeleteFile())
+	directoryGroup.GET("/", handleGetDirectory())
+	directoryGroup.DELETE("/", handleDeleteDirectory())
 }
