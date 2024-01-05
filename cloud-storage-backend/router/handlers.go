@@ -3,7 +3,6 @@ package router
 import (
 	"cloud-storage-backend/filesystem"
 	"net/http"
-	"path/filepath"
 
 	"github.com/rs/zerolog/log"
 
@@ -13,8 +12,7 @@ import (
 func handleGetFile() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		path := c.Query("path")
-		filepath := filepath.Join("root", path)
-		c.File(filepath)
+		c.File(path)
 	}
 }
 
@@ -32,7 +30,7 @@ func handlePostFile() gin.HandlerFunc {
 func handleDeleteFile() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		path := c.Query("path")
-		err := filesystem.DeleteFileOrEmptyDirectory(path)
+		err := filesystem.DeleteEntry(path)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, map[string]string{"status": "error", "errorMessage": err.Error()})
 			return
@@ -44,15 +42,25 @@ func handleDeleteFile() gin.HandlerFunc {
 func handleGetDirectory() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		path := c.Query("path")
-		directory := filesystem.GetDirectoryInfo(path)
+		directory, err := filesystem.ReadDirectory(path)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, map[string]string{"status": "error", "errorMessage": err.Error()})
+			return
+		}
 		c.JSON(http.StatusOK, directory)
+	}
+}
+
+func handlePostDirectory() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.JSON(http.StatusNotImplemented, map[string]string{"status": "error", "errorMessage": http.StatusText(http.StatusNotImplemented)})
 	}
 }
 
 func handleDeleteDirectory() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		path := c.Query("path")
-		err := filesystem.DeleteDirectory(path)
+		err := filesystem.DeleteEntry(path)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, map[string]string{"status": "error", "errorMessage": err.Error()})
 			return

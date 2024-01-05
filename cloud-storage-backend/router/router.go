@@ -50,12 +50,6 @@ func NewGinRouter() *gin.Engine {
 
 	router := engine.Group("/api")
 
-	router.GET("/", handleGetFile())
-
-	router.POST("/", handlePostFile())
-
-	router.DELETE("/", handleDeleteFile())
-
 	addXGroup(router)
 	addFileGroup(router)
 	addDirectoryGroup(router)
@@ -72,14 +66,15 @@ func addXGroup(router *gin.RouterGroup) {
 func addFileGroup(router *gin.RouterGroup) {
 	fileGroup := router.Group("/file")
 
-	fileGroup.GET("/", handleGetFile())
-	fileGroup.POST("/", handlePostFile())
-	fileGroup.DELETE("/", handleDeleteFile())
+	fileGroup.GET("", handleGetFile())
+	fileGroup.POST("", handlePostFile())
+	fileGroup.DELETE("", handleDeleteFile())
 }
 
 func addDirectoryGroup(router *gin.RouterGroup) {
 	directoryGroup := router.Group("/directory")
 
-	directoryGroup.GET("/", handleGetDirectory())
-	directoryGroup.DELETE("/", handleDeleteDirectory())
+	directoryGroup.GET("", handleGetDirectory())
+	directoryGroup.POST("", handlePostDirectory())
+	directoryGroup.DELETE("", handleDeleteDirectory())
 }
