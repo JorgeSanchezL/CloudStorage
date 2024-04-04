@@ -5,7 +5,7 @@ import { Route, Routes, useNavigate, useParams } from 'react-router-dom'
 
 import File from '../components/File'
 import Folder from '../components/Folder'
-import { getDirectoryInfo} from './backend'
+import { getDirectoryInfo, getFileInfo} from './backend'
 
 type DirectoryInfo = {
     Files: string[]
@@ -48,7 +48,11 @@ const FileSystem = (props: {parentPath: string, setParentLoad: (value: boolean) 
                         }
                         {
                             directoryInfo?.Files.map((file, index) => {
-                                return <File key={index} text={file} />
+                                return <File key={index} text={file} onClick={
+                                    () => {
+                                        getFileInfo(realPath + "/" + file)
+                                    }
+                                } />
                             })
                         }
                     </div>

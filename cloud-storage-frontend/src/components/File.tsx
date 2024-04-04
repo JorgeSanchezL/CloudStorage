@@ -1,8 +1,8 @@
 import Card from './Card'
 
-const File = (props: { text: string }) => {
+const File = (props: { text: string, onClick: () => void  }) => {
     return (
-        <Card text={props.text} color='#141414' onClick={() => {/*select file*/ }} />
+        <Card text={props.text} color='#141414' onClick={props.onClick} />
     )
 }
 

@@ -14,7 +14,7 @@ func handleGetFile() gin.HandlerFunc {
 		c.Header("Access-Control-Allow-Origin", "*")
 
 		path := c.Query("path")
-		c.File(path)
+		c.File("./root/" + path)
 	}
 }
 
