@@ -10,7 +10,7 @@ import (
 
 var (
 	ShutdownTimeout = 60
-	Port            = ":6000"
+	Port            = ":5000"
 )
 
 func main() {
