@@ -11,6 +11,8 @@ import (
 
 func handleGetFile() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+
 		path := c.Query("path")
 		c.File(path)
 	}
@@ -18,6 +20,7 @@ func handleGetFile() gin.HandlerFunc {
 
 func handlePostFile() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
 		form, err := c.MultipartForm()
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusBadRequest, map[string]string{"status": "error", "errorMessage": err.Error()})
@@ -29,6 +32,7 @@ func handlePostFile() gin.HandlerFunc {
 
 func handleDeleteFile() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
 		path := c.Query("path")
 		err := filesystem.DeleteEntry(path)
 		if err != nil {
@@ -41,8 +45,9 @@ func handleDeleteFile() gin.HandlerFunc {
 
 func handleGetDirectory() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
 		path := c.Query("path")
-		directory, err := filesystem.ReadDirectory(path)
+		directory, err := filesystem.ReadDirectory("./root/" + path)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, map[string]string{"status": "error", "errorMessage": err.Error()})
 			return
@@ -53,12 +58,14 @@ func handleGetDirectory() gin.HandlerFunc {
 
 func handlePostDirectory() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
 		c.JSON(http.StatusNotImplemented, map[string]string{"status": "error", "errorMessage": http.StatusText(http.StatusNotImplemented)})
 	}
 }
 
 func handleDeleteDirectory() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
 		path := c.Query("path")
 		err := filesystem.DeleteEntry(path)
 		if err != nil {
@@ -71,6 +78,7 @@ func handleDeleteDirectory() gin.HandlerFunc {
 
 func handlePing() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
 		c.JSON(http.StatusOK, map[string]string{"status": "ok"})
 	}
 }

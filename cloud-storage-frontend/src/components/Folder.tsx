@@ -1,8 +1,8 @@
 import Card from './Card'
 
-const Folder = (props: { text: string }) => {
+const Folder = (props: { name: string, onClick: () => void }) => {
     return (
-        <Card text={props.text} color='#f5c242' onClick={() => {/*navigate to the folder*/ }} />
+        <Card text={props.name} color='#f5c242' onClick={props.onClick}/>
     )
 }
 
