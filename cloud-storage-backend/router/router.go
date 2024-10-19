@@ -14,7 +14,7 @@ import (
 
 func NewGinRouter() *gin.Engine {
 
-	err := filesystem.InitializeFileSystem("root")
+	err := filesystem.InitializeFileSystem("fs")
 	if errors.Is(err, filesystem.ErrCannotCreateRootDirectory) {
 		log.Logger.Fatal().Err(err).Msg("Cannot create root directory")
 	} else if err != nil && os.IsNotExist(err) {

@@ -89,7 +89,7 @@ func SaveFiles(c *gin.Context, formData *multipart.Form) {
 
 	for _, path := range paths {
 		for _, file := range files {
-			filePath := filepath.Join("root", path, file.Filename)
+			filePath := filepath.Join("fs", path, file.Filename)
 			if err := c.SaveUploadedFile(file, filePath); err != nil {
 				c.AbortWithStatusJSON(http.StatusInternalServerError, map[string]string{"status": "error", "errorMessage": err.Error()})
 				return

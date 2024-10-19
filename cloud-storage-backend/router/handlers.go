@@ -14,7 +14,7 @@ func handleGetFile() gin.HandlerFunc {
 		c.Header("Access-Control-Allow-Origin", "*")
 
 		path := c.Query("path")
-		c.File("./root/" + path)
+		c.File("./fs/" + path)
 	}
 }
 
@@ -47,7 +47,7 @@ func handleGetDirectory() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")
 		path := c.Query("path")
-		directory, err := filesystem.ReadDirectory("./root/" + path)
+		directory, err := filesystem.ReadDirectory("./fs/" + path)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, map[string]string{"status": "error", "errorMessage": err.Error()})
 			return
