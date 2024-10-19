@@ -8,6 +8,7 @@
     max-width: 150px;
     text-align: center;
     transition: transform 0.2s;
+    position: relative; /* Add this line */
 }
 
 .file-container:hover {
@@ -22,4 +23,26 @@
     margin-top: 5px;
     font-size: 16px;
     word-wrap: break-word;
+}
+
+.download-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: none;
+    background-color: transparent;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.download-button:hover {
+    background-color: #0056b3;
+}
+
+.file-container:hover .download-button {
+    display: block;
 }

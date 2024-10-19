@@ -1,16 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './File.css'
 
 interface FileProps {
     text: string
-    onClick: () => void
+    onDownloadClick: () => void
 }
 
-const File: React.FC<FileProps> = ({ text, onClick }) => {
+const File: React.FC<FileProps> = ({ text, onDownloadClick }) => {
+    const [isHovered, setIsHovered] = useState(false);
+
     return (
-        <div onClick={onClick} className="file-container">
+        <div 
+            className="file-container"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
             <div className="file-icon">📄</div>
             <div className="file-text">{text}</div>
+            {isHovered && (
+                <button className="download-button" onClick={(e) => {
+                    e.stopPropagation();
+                    onDownloadClick();
+                }}>
+                    ⬇️
+                </button>
+            )}
         </div>
     )
 }

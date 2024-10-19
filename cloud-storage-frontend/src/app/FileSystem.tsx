@@ -54,7 +54,7 @@ const FileSystem = () => {
             }
             {
                 directoryInfo?.Files.map((file, index) => {
-                    return <File key={index} text={file} onClick={
+                    return <File key={index} text={file} onDownloadClick={
                         () => {
                             getFileInfo(fileSystemPath + "/" + file)
                         }
