@@ -1,15 +1,21 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import File from '../components/File'
 import Folder from '../components/Folder'
-import { getDirectoryInfo, getFileInfo } from './backend'
+import { getDirectoryInfo, getFile } from './backend'
 
 type DirectoryInfo = {
-    Files: string[]
+    Files: FileInfo[]
     Directories: string[]
 }
+
+type FileInfo = {
+    Name: string;
+    Size: number;
+    LastModification: string;
+};
 
 const FileSystem = () => {
     const { pathname } = useLocation()
@@ -53,10 +59,10 @@ const FileSystem = () => {
                 })
             }
             {
-                directoryInfo?.Files.map((file, index) => {
-                    return <File key={index} text={file} onDownloadClick={
+                directoryInfo?.Files.map((fileInfo, index) => {
+                    return <File key={index} fileInfo={fileInfo} onDownloadClick={
                         () => {
-                            getFileInfo(fileSystemPath + "/" + file)
+                            getFile(fileSystemPath + "/" + fileInfo.Name)
                         }
                     } />
                 })
