@@ -1,66 +1,66 @@
-import './App.css'
+import { useEffect, useState } from 'react'
 
-import { useState, useEffect } from 'react'
-import { Route, Routes, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import File from '../components/File'
 import Folder from '../components/Folder'
-import { getDirectoryInfo, getFileInfo} from './backend'
+import { getDirectoryInfo, getFileInfo } from './backend'
 
 type DirectoryInfo = {
     Files: string[]
     Directories: string[]
 }
 
+const FileSystem = () => {
+    const { pathname } = useLocation()
 
-const FileSystem = (props: {parentPath: string, setParentLoad: (value: boolean) => void}) => {
-
-    let [shouldLoad, setShouldLoad] = useState<boolean>(true)
-
-    const { path } = useParams()
-    let realPath = (props.parentPath + "/" + path).replace(/^\/+/, '')
+    let path = pathname.replace(/^\/+/, '')
+    let fileSystemPath = path.includes('/') ? path.substring(path.indexOf('/') + 1) : ""
 
     const navigate = useNavigate()
 
     const [directoryInfo, setDirectoryInfo] = useState<DirectoryInfo | null>(null)
 
+
     useEffect(() => {
-        props.setParentLoad(false)
-        getDirectoryInfo(realPath).then((res) => {
+        getDirectoryInfo(fileSystemPath).then((res) => {
             setDirectoryInfo(res)
-            console.log(res)
         })
-    }, [])
+    }, [pathname])
 
     return (
-        <div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", rowGap: "32px", justifyItems: "center", marginTop: "calc(5vh + 32px)" }}>
             {
-                shouldLoad ? 
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", rowGap: "32px", justifyItems: "center", marginTop: "calc(5vh + 32px)" }}>
-                        {
-                            directoryInfo?.Directories.map((directory, index) => {
-                                return <Folder key={index} name={directory} onClick={
-                                    () => {
-                                        navigate(directory)
-                                    }
-                                }/>
-                            })
+                fileSystemPath ?
+                    <Folder key={".."} name={"↩"} onClick={
+                        () => {
+                            let newPath = path.endsWith('/') ? path.slice(0, -1) : path;
+                            newPath = newPath.substring(0, newPath.lastIndexOf('/'));
+                            navigate(`/${newPath}`)
                         }
-                        {
-                            directoryInfo?.Files.map((file, index) => {
-                                return <File key={index} text={file} onClick={
-                                    () => {
-                                        getFileInfo(realPath + "/" + file)
-                                    }
-                                } />
-                            })
-                        }
-                    </div>
-                : null
+                    } />
+                    : 
+                    null
             }
-        <Routes>
-            <Route path="/:path/*" element={<FileSystem setParentLoad={(value: boolean) => setShouldLoad(value)} parentPath={realPath}/>} />
-        </Routes>
+            {
+                directoryInfo?.Directories.map((directory, index) => {
+                    return <Folder key={index} name={directory} onClick={
+                        () => {
+                            let currentPath = fileSystemPath == "" ? "" : fileSystemPath + '/';
+                            navigate(currentPath + directory)
+                        }
+                    } />
+                })
+            }
+            {
+                directoryInfo?.Files.map((file, index) => {
+                    return <File key={index} text={file} onClick={
+                        () => {
+                            getFileInfo(fileSystemPath + "/" + file)
+                        }
+                    } />
+                })
+            }
         </div>
     )
 }

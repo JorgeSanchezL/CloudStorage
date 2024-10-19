@@ -1,0 +1,81 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    background-color: #282c34; /* Set a background color */
+    color: white; /* Ensure text is readable on the background */
+    font-family: 'Arial', sans-serif;
+    position: relative; /* Needed for positioning shapes */
+    overflow: hidden; /* Hide overflow of shapes */
+}
+
+.content-box {
+    background-color: rgba(36, 36, 36, 0.15); /* Light color with opacity */
+    border-radius: 15px; /* Rounded corners */
+    padding: 50px; /* Padding inside the box */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25); /* Optional: Add a subtle shadow */
+}
+
+.shape {
+    position: absolute;
+    border-radius: 50%; /* Makes the shape a circle */
+    background: rgba(255, 255, 255, 0.1); /* Light white color with transparency */
+    animation: move 20s infinite; /* Animation for movement */
+}
+
+.shape1 {
+    width: 200px;
+    height: 200px;
+    top: 10%;
+    left: 23%;
+}
+
+.shape2 {
+    width: 300px;
+    height: 300px;
+    top: 50%;
+    left: 70%;
+}
+
+.shape3 {
+    width: 150px;
+    height: 150px;
+    top: 80%;
+    left: 10%;
+}
+
+@keyframes move {
+    0% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-20px) translateX(20px); }
+    100% { transform: translateY(0) translateX(0); }
+}
+
+.heading {
+    font-size: 4em; /* Increased from 3em to 4em */
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add shadow for better readability */
+}
+
+.paragraph {
+    font-size: 1.5em; /* Increased from 1.2em to 1.5em */
+    margin-bottom: 40px;
+    line-height: 1.8;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add shadow for better readability */
+    color: rgba(255, 255, 255, 0.6); /* Slightly transparent white for differentiation */
+}
+
+.button {
+    padding: 16px 32px; /* Increased padding */
+    font-size: 18px; /* Increased font size */
+    cursor: pointer;
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    transition: background 0.3s ease;
+    margin: 10px;
+    text-shadow: none; /* Ensure button text is clear */
+}
