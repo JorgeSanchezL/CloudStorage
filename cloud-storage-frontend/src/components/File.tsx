@@ -1,8 +1,17 @@
-import Card from './Card'
+import React from 'react'
+import './File.css'
 
-const File = (props: { text: string, onClick: () => void  }) => {
+interface FileProps {
+    text: string
+    onClick: () => void
+}
+
+const File: React.FC<FileProps> = ({ text, onClick }) => {
     return (
-        <Card text={props.text} color='#141414' onClick={props.onClick} />
+        <div onClick={onClick} className="file-container">
+            <div className="file-icon">📄</div>
+            <div className="file-text">{text}</div>
+        </div>
     )
 }
 

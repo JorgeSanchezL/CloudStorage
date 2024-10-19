@@ -1,8 +1,17 @@
-import Card from './Card'
+import React from 'react'
+import './Folder.css'
 
-const Folder = (props: { name: string, onClick: () => void }) => {
+interface FolderProps {
+    name: string
+    onClick: () => void
+}
+
+const Folder: React.FC<FolderProps> = ({ name, onClick }) => {
     return (
-        <Card text={props.name} color='#f5c242' onClick={props.onClick}/>
+        <div onClick={onClick} className="folder-container">
+            <div className="folder-icon">📁</div>
+            <div className="folder-text">{name}</div>
+        </div>
     )
 }
 

@@ -1,0 +1,25 @@
+.file-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    max-width: 150px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.file-container:hover {
+    transform: scale(1.05);
+}
+
+.file-icon {
+    font-size: 48px; /* Make the icon bigger */
+}
+
+.file-text {
+    margin-top: 5px;
+    font-size: 16px;
+    word-wrap: break-word;
+}
