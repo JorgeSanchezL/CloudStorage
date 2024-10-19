@@ -66,6 +66,7 @@ func addXGroup(router *gin.RouterGroup) {
 func addFileGroup(router *gin.RouterGroup) {
 	fileGroup := router.Group("/file")
 
+	fileGroup.GET("/info", handleGetFileInformation())
 	fileGroup.GET("", handleGetFile())
 	fileGroup.POST("", handlePostFile())
 	fileGroup.DELETE("", handleDeleteFile())

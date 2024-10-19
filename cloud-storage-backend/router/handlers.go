@@ -18,6 +18,22 @@ func handleGetFile() gin.HandlerFunc {
 	}
 }
 
+func handleGetFileInformation() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+
+		path := c.Query("path")
+
+		file, err := filesystem.GetFileInformation(path)
+
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, map[string]string{"status": "error", "errorMessage": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, file)
+	}
+}
+
 func handlePostFile() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")

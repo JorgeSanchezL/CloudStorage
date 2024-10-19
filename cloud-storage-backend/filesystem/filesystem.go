@@ -25,13 +25,14 @@ type DirectoryData struct {
 	LastModification time.Time
 }
 
+type FileData struct {
+	Size             int64
+	LastModification time.Time
+}
+
 type FileSystem struct {
 	Root DirectoryData
 }
-
-var (
-	fs FileSystem
-)
 
 var (
 	ErrCannotCreateRootDirectory = errors.New("cannot create root directory")
@@ -83,6 +84,16 @@ func ReadDirectory(path string) (*DirectoryData, error) {
 	return &DirectoryData{Files: files, Subdirectories: subdirectories, Size: size, LastModification: lastModification}, nil
 }
 
+func GetFileInformation(path string) (*FileData, error) {
+	info, err := os.Stat(path)
+	if err != nil {
+		return nil, err
+	}
+
+	return &FileData{Size: info.Size(), LastModification: info.ModTime()}, nil
+
+}
+
 func SaveFiles(c *gin.Context, formData *multipart.Form) {
 	files := formData.File["files"]
 	paths := formData.Value["paths"]
@@ -99,6 +110,7 @@ func SaveFiles(c *gin.Context, formData *multipart.Form) {
 
 	c.JSON(http.StatusOK, map[string]string{"status": "ok"})
 }
+
 func DeleteEntry(path string) error {
 	// The Remove function deletes the named file or directory.
 	err := os.Remove(path)
