@@ -57,6 +57,7 @@
     font-size: 4em; /* Increased from 3em to 4em */
     margin-bottom: 30px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add shadow for better readability */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Glowing effect */
 }
 
 .paragraph {

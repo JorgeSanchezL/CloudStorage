@@ -32,7 +32,7 @@ const FileInfoCard: React.FC<FileInfoCardProps> = ({ fileInfo, onClose }) => {
         <div className="modal-overlay">
             <div className="modal-content">
                 <button className="close-button" onClick={onClose}>✖️</button>
-                <h2>File Information</h2>
+                <h1 className="modal-title">File Information</h1>
                 <p><strong>Name:</strong> {fileInfo.Name}</p>
                 <p><strong>Size:</strong> {formatSize(fileInfo.Size)}</p>
                 <p><strong>Date of last modification:</strong> {formatDateTime(fileInfo.LastModification)}</p>
