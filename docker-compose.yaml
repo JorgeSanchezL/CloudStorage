@@ -15,4 +15,4 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - /mnt/g/FileSystem:/root/fs
+      - ${VOLUME_PATH?VOLUME_PATH is required as it is the path of the directory that will be mounted in the container}:/root/fs
