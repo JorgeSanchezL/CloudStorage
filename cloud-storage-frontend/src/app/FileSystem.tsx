@@ -4,7 +4,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 
 import File from '../components/File'
 import Folder from '../components/Folder'
-import { getDirectoryInfo, getFile } from './backend'
+import New from '../components/New'
+import { getDirectoryInfo, getFile, removeFile, uploadFiles } from './backend'
 
 type DirectoryInfo = {
     Files: FileInfo[]
@@ -34,8 +35,33 @@ const FileSystem = () => {
         })
     }, [pathname])
 
+    const handleFileDownload = async (fileName: string) => {
+        await getFile(fileSystemPath + "/" + fileName);
+    }
+        
+
+    const handleFileRemove = async (fileName: string) => {
+        await removeFile(fileSystemPath + "/" + fileName);
+        // Refresh the directory info after removing the file
+        getDirectoryInfo(fileSystemPath).then((res) => {
+            setDirectoryInfo(res);
+        });
+    }
+
+    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const fileInput = event.target;
+        if (fileInput.files && fileInput.files.length > 0) {
+            await uploadFiles(fileInput.files, [fileSystemPath]);
+            // Refresh the directory info after uploading the file
+            getDirectoryInfo(fileSystemPath).then((res) => {
+                setDirectoryInfo(res);
+            });
+        }
+    };
+
     return (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", rowGap: "32px", justifyItems: "center", marginTop: "calc(5vh + 32px)" }}>
+            <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileUpload} />
             {
                 fileSystemPath ?
                     <Folder key={".."} name={"↩"} onClick={
@@ -60,13 +86,23 @@ const FileSystem = () => {
             }
             {
                 directoryInfo?.Files.map((fileInfo, index) => {
-                    return <File key={index} fileInfo={fileInfo} onDownloadClick={
-                        () => {
-                            getFile(fileSystemPath + "/" + fileInfo.Name)
-                        }
-                    } />
+                    return <File 
+                        key={index} 
+                        fileInfo={fileInfo}
+                        onDownloadClick={
+                            () => {
+                                handleFileDownload(fileInfo.Name)
+                            }
+                        } 
+                        onRemoveClick={
+                            () => {
+                                handleFileRemove(fileInfo.Name)
+                            }
+                        } 
+                    />
                 })
             }
+            <New key={"+"} onClick={() => document.getElementById('fileInput')?.click()} />
         </div>
     )
 }

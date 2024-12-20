@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
+import { ModalContext } from '../modal/modalProvider';
 import './File.css';
-import { ModalContext } from '../modal/modalProvider'; // Adjust the import path as necessary
 
+import DeleteConfirmationCard from './DeleteConfirmationCard';
 import FileInfoCard from './FileInfoCard';
-import ReactDOM from 'react-dom';
 
 type FileInfo = {
     Name: string;
@@ -14,9 +14,10 @@ type FileInfo = {
 interface FileProps {
     fileInfo: FileInfo;
     onDownloadClick: () => void;
+    onRemoveClick: () => void;
 }
 
-const File: React.FC<FileProps> = ({ fileInfo, onDownloadClick }) => {
+const File: React.FC<FileProps> = ({ fileInfo, onDownloadClick, onRemoveClick }) => {
 
     const modalContext = useContext(ModalContext);
 
@@ -33,15 +34,37 @@ const File: React.FC<FileProps> = ({ fileInfo, onDownloadClick }) => {
             className="file-container"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={isModalOpen ? closeModal : () => openModal(
-                <FileInfoCard 
-                    fileInfo={fileInfo} 
-                    onClose={() => closeModal()}
-                />)
+            onClick={(e) => {
+                e.stopPropagation();
+                isModalOpen ? closeModal : () => openModal(
+                    <FileInfoCard 
+                        fileInfo={fileInfo} 
+                        onClose={() => closeModal()}
+                    />)
+                }
             }>
 
             <div className="file-icon">📄</div>
             <div className="file-text">{fileInfo.Name}</div>
+            {isHovered && (
+                <button 
+                    className="remove-button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        openModal(
+                            <DeleteConfirmationCard 
+                                fileName={fileInfo.Name}
+                                onAccept={() => {
+                                    onRemoveClick()
+                                    closeModal()
+                                }} 
+                                onCancel={() => closeModal()}
+                            />
+                        );
+                    }}>
+                    🗑️
+                </button>
+            )}
             {isHovered && (
                 <button className="download-button" onClick={(e) => {
                     e.stopPropagation();

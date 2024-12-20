@@ -43,6 +43,28 @@
     background-color: #0056b3;
 }
 
+.remove-button {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: none;
+    background-color: transparent;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.remove-button:hover {
+    background-color: #83220a;
+}
+
 .file-container:hover .download-button {
+    display: block;
+}
+
+.file-container:hover .remove-button {
     display: block;
 }

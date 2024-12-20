@@ -1,0 +1,19 @@
+.new-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    max-width: 150px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.new-container:hover {
+    transform: scale(1.05);
+}
+
+.new-icon {
+    font-size: 48px; /* Make the icon bigger */
+}
