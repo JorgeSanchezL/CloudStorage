@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -42,6 +43,13 @@ func NewGinRouter() *gin.Engine {
 			return buf.String()
 		},
 	}
+
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost"} // Cambia esto al origen de tu frontend
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept"}
+
+	engine.Use(cors.New(config))
 
 	engine.Use(
 		gin.LoggerWithConfig(logConf),
