@@ -2,6 +2,7 @@ package router
 
 import (
 	"cloud-storage-backend/filesystem"
+	"fmt"
 	"net/http"
 
 	"github.com/rs/zerolog/log"
@@ -24,7 +25,7 @@ func handleGetFileInformation() gin.HandlerFunc {
 
 		path := c.Query("path")
 
-		file, err := filesystem.GetFileInformation(path)
+		file, err := filesystem.GetFileInformation("./fs/" + path)
 
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, map[string]string{"status": "error", "errorMessage": err.Error()})
@@ -50,8 +51,9 @@ func handleDeleteFile() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")
 		path := c.Query("path")
-		err := filesystem.DeleteEntry(path)
+		err := filesystem.DeleteEntry("./fs/" + path)
 		if err != nil {
+			fmt.Print(err)
 			c.AbortWithStatusJSON(http.StatusInternalServerError, map[string]string{"status": "error", "errorMessage": err.Error()})
 			return
 		}
@@ -83,7 +85,7 @@ func handleDeleteDirectory() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")
 		path := c.Query("path")
-		err := filesystem.DeleteEntry(path)
+		err := filesystem.DeleteEntry("./fs/" + path)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, map[string]string{"status": "error", "errorMessage": err.Error()})
 			return
